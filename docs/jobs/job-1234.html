@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Job #1234 – CNC Code</title>
+  <style>
+    body { font-family: monospace; background: #fff; padding: 20px; }
+    h1, p { font-family: Arial, sans-serif; }
+    pre {
+      background: #f0f0f0;
+      padding: 15px;
+      border: 1px solid #ccc;
+      overflow-x: auto;
+    }
+    a { display: block; margin-bottom: 20px; color: #007ACC; }
+  </style>
+</head>
+<body>
+  <a href="../index.html">← Back to Job List</a>
+  <h1>Job #1234 – Aluminum Bracket</h1>
+  <p><strong>Date:</strong> 2025-05-27</p>
+  <p><strong>Description:</strong> Drilling and contour milling aluminum bracket using 3-axis mill.</p>
+  <h2>NC Code:</h2>
+  <pre>
+%
+O1234
+(TITLE - ALUMINUM BRACKET)
+G21
+G90
+G0 Z5
+G0 X0 Y0
+M3 S1200
+G1 Z-5 F100
+G1 X50 Y0 F200
+G1 Y50
+G1 X0
+G1 Y0
+G0 Z5
+M5
+M30
+%
+  </pre>
+</body>
+</html>
