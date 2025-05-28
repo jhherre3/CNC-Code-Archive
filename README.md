@@ -23,10 +23,11 @@ The **CNC-Code-Archive** is a simple HTML-based static site for organizing and d
 
 ## 📁 Folder Structure
 
+```bash
 CNC-Code-Archive/
 ├── docs/
-│ ├── index.html # Homepage with job list
-│ └── jobs/
-│ ├── job-1234.html # Example job file
-│ └── job-5678.html # Another job file
+│   ├── index.html              # Homepage with job list
+│   └── jobs/
+│       ├── job-1234.html       # Example job file
+│       └── job-5678.html       # Another job file
 ├── README.md
