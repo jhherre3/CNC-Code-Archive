@@ -65,14 +65,12 @@
   <p>Select a job to view its NC code, notes, and toolpath.</p>
   <ul id="jobList">
     <li>
-      <a href="https://ncnetic.com/gcode-viewer/?url=https://your-org.github.io/CNC-Code-Archive/docs/jobs/1369.NC" target="_blank">
+      <a href="jobs/job-1369.html">
         Job #1369 – Sample NC Program
       </a>
       <div class="job-meta">Machine: HAAS | Tags: sample, aluminum, drill</div>
       <div class="toolpath-view">
-        <a href="https://ncnetic.com/gcode-viewer/?url=https://your-org.github.io/CNC-Code-Archive/docs/jobs/1369.NC" target="_blank">
-          View Toolpath
-        </a>
+        <a href="jobs/job-1369.html">Open Job Details</a>
       </div>
     </li>
   </ul>
@@ -115,7 +113,7 @@
 
     document.getElementById('jobUploadForm').addEventListener('submit', function(event) {
       event.preventDefault();
-      alert("Mock backend: Job submitted. Job number will be auto-generated.");
+      alert("Mock backend: Job submitted. Job HTML page will be generated.");
     });
   </script>
 </body>
