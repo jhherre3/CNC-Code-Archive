@@ -12,11 +12,18 @@
     h1 {
       color: #222;
     }
-    iframe {
-      width: 100%;
-      height: 600px;
-      border: 1px solid #ccc;
+    button.copy-button {
       margin-bottom: 1rem;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      background-color: #007ACC;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button.copy-button:hover {
+      background-color: #005f99;
     }
     pre {
       background: #1e1e1e;
@@ -25,23 +32,41 @@
       border-radius: 8px;
       max-height: 400px;
       overflow-y: auto;
+      white-space: pre-wrap;
+    }
+    iframe {
+      width: 100%;
+      height: 600px;
+      border: 1px solid #ccc;
+      margin-top: 2rem;
     }
   </style>
 </head>
 <body>
   <h1>Job #1369 – NCViewer G-code Preview</h1>
 
-  <iframe src="https://ncviewer.com/" title="NC Viewer"></iframe>
-
   <h2>G-code</h2>
+  <button class="copy-button" onclick="copyCode()">📋 Copy G-code for NCViewer</button>
   <pre id="gcodeOutput">Loading G-code...</pre>
 
+  <iframe src="https://ncviewer.com/" title="NC Viewer"></iframe>
+
   <script>
+    let gcodeText = '';
+
+    function copyCode() {
+      navigator.clipboard.writeText(gcodeText).then(() => {
+        alert('G-code copied to clipboard!');
+      }, () => {
+        alert('Failed to copy G-code.');
+      });
+    }
+
     fetch('1369.NC')
       .then(res => res.text())
       .then(code => {
+        gcodeText = code;
         document.getElementById('gcodeOutput').textContent = code;
-        console.log("Paste this into NCViewer:", code);
       })
       .catch(() => {
         document.getElementById('gcodeOutput').textContent = 'Failed to load G-code.';
