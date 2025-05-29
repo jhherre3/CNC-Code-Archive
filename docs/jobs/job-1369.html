@@ -16,6 +16,9 @@
       background: #fff;
       border: 1px solid #ccc;
       margin-bottom: 1rem;
+      width: 100%;
+      max-width: 800px;
+      height: auto;
     }
     pre {
       background: #1e1e1e;
@@ -30,15 +33,13 @@
 <body>
   <h1>Job #1369 – Simple G-code Visualizer</h1>
 
-  <canvas id="toolpathCanvas" width="600" height="600"></canvas>
+  <canvas id="toolpathCanvas" width="800" height="600"></canvas>
   <h2>G-code</h2>
   <pre id="gcodeOutput">Loading G-code...</pre>
 
   <script>
     const canvas = document.getElementById('toolpathCanvas');
     const ctx = canvas.getContext('2d');
-    const scale = 2;
-    let x = 300, y = 300;
 
     fetch('1369.NC')
       .then(res => res.text())
@@ -46,20 +47,36 @@
         document.getElementById('gcodeOutput').textContent = code;
 
         const lines = code.split('\n');
-        ctx.beginPath();
-        ctx.moveTo(x, y);
+        const path = [];
+        let x = 0, y = 0;
+        let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
 
         lines.forEach(line => {
           line = line.trim();
           if (line.startsWith('G0') || line.startsWith('G1')) {
-            let matchX = line.match(/X(-?\d+\.?\d*)/i);
-            let matchY = line.match(/Y(-?\d+\.?\d*)/i);
-            if (matchX || matchY) {
-              if (matchX) x = 300 + parseFloat(matchX[1]) * scale;
-              if (matchY) y = 300 - parseFloat(matchY[1]) * scale;
-              ctx.lineTo(x, y);
-            }
+            const matchX = line.match(/X(-?\d+\.?\d*)/i);
+            const matchY = line.match(/Y(-?\d+\.?\d*)/i);
+            if (matchX) x = parseFloat(matchX[1]);
+            if (matchY) y = parseFloat(matchY[1]);
+            path.push([x, y]);
+            minX = Math.min(minX, x);
+            maxX = Math.max(maxX, x);
+            minY = Math.min(minY, y);
+            maxY = Math.max(maxY, y);
           }
+        });
+
+        const padding = 20;
+        const scaleX = (canvas.width - 2 * padding) / (maxX - minX || 1);
+        const scaleY = (canvas.height - 2 * padding) / (maxY - minY || 1);
+        const scale = Math.min(scaleX, scaleY);
+
+        ctx.beginPath();
+        path.forEach(([px, py], index) => {
+          const screenX = padding + (px - minX) * scale;
+          const screenY = canvas.height - padding - (py - minY) * scale;
+          if (index === 0) ctx.moveTo(screenX, screenY);
+          else ctx.lineTo(screenX, screenY);
         });
 
         ctx.strokeStyle = '#007ACC';
