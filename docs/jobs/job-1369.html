@@ -12,13 +12,11 @@
     h1 {
       color: #222;
     }
-    canvas {
-      background: #fff;
+    iframe {
+      width: 100%;
+      height: 600px;
       border: 1px solid #ccc;
       margin-bottom: 1rem;
-      width: 100%;
-      max-width: 800px;
-      height: auto;
     }
     pre {
       background: #1e1e1e;
@@ -31,65 +29,22 @@
   </style>
 </head>
 <body>
-  <h1>Job #1369 – Simple G-code Visualizer</h1>
+  <h1>Job #1369 – NCViewer G-code Preview</h1>
 
-  <canvas id="toolpathCanvas" width="800" height="600"></canvas>
+  <iframe src="https://ncviewer.com/" title="NC Viewer"></iframe>
+
   <h2>G-code</h2>
   <pre id="gcodeOutput">Loading G-code...</pre>
 
   <script>
-    const canvas = document.getElementById('toolpathCanvas');
-    const ctx = canvas.getContext('2d');
-
     fetch('1369.NC')
       .then(res => res.text())
       .then(code => {
         document.getElementById('gcodeOutput').textContent = code;
-
-        const lines = code.split('\n');
-        const path = [];
-        let x = 0, y = 0;
-        let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
-
-        lines.forEach(line => {
-          line = line.trim();
-          if (/G00|G01/.test(line)) {
-            const matchX = line.match(/X(-?\d+\.?\d*)/i);
-            const matchY = line.match(/Y(-?\d+\.?\d*)/i);
-            if (matchX) x = parseFloat(matchX[1]);
-            if (matchY) y = parseFloat(matchY[1]);
-            path.push([x, y]);
-            if (matchX || matchY) {
-              minX = Math.min(minX, x);
-              maxX = Math.max(maxX, x);
-              minY = Math.min(minY, y);
-              maxY = Math.max(maxY, y);
-            }
-          }
-        });
-
-        if (path.length < 2) return;
-
-        const padding = 40;
-        const drawWidth = canvas.width - 2 * padding;
-        const drawHeight = canvas.height - 2 * padding;
-        const scaleX = drawWidth / (maxX - minX || 1);
-        const scaleY = drawHeight / (maxY - minY || 1);
-        const scale = Math.min(scaleX, scaleY);
-
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.beginPath();
-
-        path.forEach(([px, py], i) => {
-          const sx = padding + (px - minX) * scale;
-          const sy = canvas.height - padding - (py - minY) * scale;
-          if (i === 0) ctx.moveTo(sx, sy);
-          else ctx.lineTo(sx, sy);
-        });
-
-        ctx.strokeStyle = '#007ACC';
-        ctx.lineWidth = 2;
-        ctx.stroke();
+        console.log("Paste this into NCViewer:", code);
+      })
+      .catch(() => {
+        document.getElementById('gcodeOutput').textContent = 'Failed to load G-code.';
       });
   </script>
 </body>
