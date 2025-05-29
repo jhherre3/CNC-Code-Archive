@@ -4,21 +4,118 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>CNC Job Archive</title>
+  <link rel="stylesheet" href="style.css" />
   <style>
-    body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; }
-    h1 { color: #333; }
-    ul { list-style: none; padding: 0; }
-    li { background: #fff; margin: 10px 0; padding: 15px; border-left: 5px solid #007ACC; }
-    a { text-decoration: none; color: #007ACC; font-weight: bold; }
-    a:hover { text-decoration: underline; }
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      padding: 20px;
+    }
+    h1 {
+      color: #333;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      background: #fff;
+      margin: 10px 0;
+      padding: 15px;
+      border-left: 5px solid #007ACC;
+    }
+    a {
+      text-decoration: none;
+      color: #007ACC;
+      font-weight: bold;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    #uploadForm {
+      margin-top: 30px;
+      background: #fff;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    #searchBar {
+      margin-top: 20px;
+      width: 100%;
+      padding: 10px;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .job-meta {
+      font-size: 0.9rem;
+      color: #666;
+      margin-top: 5px;
+    }
+    .toolpath-view {
+      margin-top: 10px;
+      font-size: 0.8rem;
+      color: #555;
+    }
   </style>
 </head>
 <body>
   <h1>CNC Job Code Archive</h1>
-  <p>Select a job to view its NC code and details.</p>
-  <ul>
-    <li><a href="jobs/job-1234.html">Job #1234 – Aluminum Bracket</a></li>
-    <li><a href="jobs/job-5678.html">Job #5678 – Steel Shaft</a></li>
+  <input type="text" id="searchBar" placeholder="Search jobs by ID, part, machine, or tag..." onkeyup="filterJobs()" />
+  <p>Select a job to view its NC code, notes, and toolpath.</p>
+  <ul id="jobList">
+    <li>
+      <a href="jobs/job-1202.html">Job #1202 – Thread Milling</a>
+      <div class="job-meta">Machine: VF-2SS | Tags: milling, thread</div>
+      <div class="toolpath-view"><a href="https://ncnetic.com/gcode-viewer/?url=https://your-repo-path/jobs/1202.nc" target="_blank">View Toolpath</a></div>
+    </li>
+    <li>
+      <a href="jobs/job-O12010.html">Job #O12010 – Face & Bore Pass</a>
+      <div class="job-meta">Machine: ST10-Y | Tags: boring, facing</div>
+      <div class="toolpath-view"><a href="https://ncnetic.com/gcode-viewer/?url=https://your-repo-path/jobs/O12010.nc" target="_blank">View Toolpath</a></div>
+    </li>
   </ul>
+
+  <div id="uploadForm">
+    <h3>Create New CNC Job</h3>
+    <form id="jobUploadForm">
+      <label for="machine">Machine Type:</label><br />
+      <select id="machine" name="machine" required>
+        <option value="">-- Select Machine --</option>
+        <option value="HAAS">HAAS</option>
+        <option value="TORNOS">TORNOS</option>
+      </select><br /><br />
+
+      <label for="jobName">Job Name:</label><br />
+      <input type="text" id="jobName" name="jobName" required /><br /><br />
+
+      <label for="partNumber">Part Number:</label><br />
+      <input type="text" id="partNumber" name="partNumber" /><br /><br />
+
+      <label for="tags">Tags (comma separated):</label><br />
+      <input type="text" id="tags" name="tags" /><br /><br />
+
+      <label for="file">Upload .NC File:</label><br />
+      <input type="file" id="file" name="file" accept=".nc" required /><br /><br />
+
+      <input type="submit" value="Submit Job" />
+    </form>
+  </div>
+
+  <script>
+    function filterJobs() {
+      const input = document.getElementById('searchBar').value.toLowerCase();
+      const jobs = document.querySelectorAll('#jobList li');
+      jobs.forEach(job => {
+        const text = job.innerText.toLowerCase();
+        job.style.display = text.includes(input) ? '' : 'none';
+      });
+    }
+
+    document.getElementById('jobUploadForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      alert("Mock backend: Job submitted. Job number will be auto-generated.");
+    });
+  </script>
 </body>
 </html>
