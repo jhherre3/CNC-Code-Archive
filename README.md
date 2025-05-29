@@ -29,5 +29,5 @@ CNC-Code-Archive/
 │   ├── index.html              # Homepage with job list
 │   └── jobs/
 │       ├── job-1234.html       # Example job file
-│       └── job-5678.NC       # Another job file
+│       └── job-1234.NC       # NC job file
 ├── README.md
